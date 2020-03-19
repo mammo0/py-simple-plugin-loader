@@ -5,7 +5,7 @@ from simple_plugin_loader.loader import Loader
 from tests.test_plugins.test_plugin_main import TestPlugin
 
 
-PLUGIN_PATH = "test_plugins"
+PLUGIN_PATH = os.path.join(os.path.dirname(__file__), "test_plugins")
 
 
 class Test(unittest.TestCase):
