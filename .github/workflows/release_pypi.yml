@@ -26,7 +26,7 @@ jobs:
         - name: Install test dependencies
           run: |
             python -m pip install --upgrade pip
-            pip install pytest
+            pip install --upgrade pytest
         - name: Test package
           run: pytest
 
@@ -46,7 +46,7 @@ jobs:
         - name: Install build dependencies
           run: |
             python -m pip install --upgrade pip
-            pip install setuptools wheel twine
+            pip install --upgrade setuptools wheel twine
         - name: Build package
           run: python setup.py sdist bdist_wheel
         # on a regular push publish the package to test PyPI repo
