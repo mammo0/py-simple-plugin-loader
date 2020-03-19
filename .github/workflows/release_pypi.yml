@@ -37,6 +37,9 @@ jobs:
     steps:
         # checkout the repo
         - uses: actions/checkout@v2
+          with:
+            # fetch complete history because it's needed in setup.py
+            fetch-depth: 0
         # setup python environment
         - name: Set up Python 3.5
           uses: actions/setup-python@v1
