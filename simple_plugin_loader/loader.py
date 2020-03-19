@@ -8,7 +8,7 @@ import os
 import pkgutil
 import sys
 
-from plugin_loader.sample_plugin import SamplePlugin
+from simple_plugin_loader.sample_plugin import SamplePlugin
 
 
 class Loader():

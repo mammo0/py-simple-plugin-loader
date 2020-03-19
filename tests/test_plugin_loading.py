@@ -1,7 +1,7 @@
 import os
 import unittest
 
-from plugin_loader.loader import Loader
+from simple_plugin_loader.loader import Loader
 from tests.test_plugins.test_plugin_main import TestPlugin
 
 
