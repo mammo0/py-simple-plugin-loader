@@ -40,6 +40,8 @@ jobs:
           with:
             # fetch complete history because it's needed in setup.py
             fetch-depth: 0
+          # also fetch all tags
+          run: git fetch origin +refs/tags/*:refs/tags/*
         # setup python environment
         - name: Set up Python 3.5
           uses: actions/setup-python@v1
