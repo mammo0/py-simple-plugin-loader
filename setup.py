@@ -25,7 +25,7 @@ def get_version():
             # get amount of commits since the last tag as pre-release
             commit_count_since_latest_tag = len(list(repo.iter_commits(max_age=latest_tag.commit.authored_date))) - 1
             # return a pre-release tag
-            return "%sa%s" % (latest_tag.name, commit_count_since_latest_tag)
+            return "%s.post%s" % (latest_tag.name, commit_count_since_latest_tag)
     else:
         # get the current commit count to use as pre-release
         git_commit_count = len(list(repo.iter_commits()))
