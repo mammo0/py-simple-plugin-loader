@@ -1,5 +1,8 @@
 # Simple Python Plugin Loader
 
+![PyPI package](https://github.com/mammo0/py-simple-plugin-loader/workflows/PyPI%20package/badge.svg)
+[![PyPI version](https://badge.fury.io/py/simple-plugin-loader.svg)](https://badge.fury.io/py/simple-plugin-loader)
+
 This module provides a simple way to dynamically load other Python modules as Plugins to your current project.
 
 
