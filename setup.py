@@ -35,7 +35,7 @@ def get_version():
 
 # the actual setup
 setuptools.setup(
-    name="simple-plugin-loader-mammo0",
+    name="simple-plugin-loader",
     version=get_version(),
     author="Marc Ammon",
     author_email="marc.ammon@hotmail.de",
