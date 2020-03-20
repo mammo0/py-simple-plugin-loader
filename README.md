@@ -6,6 +6,16 @@
 This module provides a simple way to dynamically load other Python modules as Plugins to your current project.
 
 
+### Install
+
+You can install this python module via **pip**:
+```shell
+pip install simple-plugin-loader
+```
+
+Otherwise the module can be downloaded from PyPI: https://pypi.org/project/simple-plugin-loader/
+
+
 ### Usage
 
 1. Import the module:
