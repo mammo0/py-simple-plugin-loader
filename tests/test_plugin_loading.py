@@ -37,6 +37,7 @@ class Test(unittest.TestCase):
 
         self.check_plugin_loaded(plugins, "plugin1")
         self.check_plugin_loaded(plugins, "subplugin1")
+        self.check_plugin_loaded(plugins, "subplugin2")
 
     def test_load_plugins_from_package_not_in_path(self):
         # this path is not in the current sys.path
