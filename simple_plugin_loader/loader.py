@@ -81,7 +81,14 @@ class Loader():
                         issubclass(attribute, plugin_base_class) and
                         # but do not match the plugin class itself
                         attribute != plugin_base_class):
-                    plugins[name.casefold()] = attribute
+                    if hasattr(attribute, "plugin_name"):
+                        # if the plugin is derived from 'SamplePlugin' class, use the 'plugin_name' property as name
+                        pn = attribute.plugin_name
+                    else:
+                        # otherwise simply use the class name
+                        pn = attribute.__name__
+
+                    plugins[pn.casefold()] = attribute
                     plugin_found = True
 
             # remove imported module again if no plugin class is found
