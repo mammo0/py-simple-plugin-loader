@@ -36,7 +36,7 @@ class Test(unittest.TestCase):
         plugins = self.loader.load_plugins(PLUGIN_PATH, TestPlugin, True)
 
         self.check_plugin_loaded(plugins, "plugin1")
-        self.check_plugin_loaded(plugins, "sub_plugin1")
+        self.check_plugin_loaded(plugins, "subplugin1")
 
     def test_load_plugins_from_package_not_in_path(self):
         # this path is not in the current sys.path
@@ -44,7 +44,7 @@ class Test(unittest.TestCase):
 
         plugins = self.loader.load_plugins(plugin_dir_not_in_path, TestPlugin)
 
-        self.check_plugin_loaded(plugins, "sub_plugin1")
+        self.check_plugin_loaded(plugins, "subplugin1")
 
 
 if __name__ == "__main__":
