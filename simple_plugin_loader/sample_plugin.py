@@ -11,6 +11,11 @@ from abc import ABC
 import sys
 
 
+class classproperty(property):
+    def __get__(self, _, owner):
+        return super(classproperty, self).__get__(owner)
+
+
 class SamplePlugin(ABC):
     """
     You can use this class as a base class that can be loaded with the plugin loader.
@@ -35,13 +40,13 @@ class SamplePlugin(ABC):
             kwargs.pop("file")
         self.__print(msg, sys.stderr, **kwargs)
 
-    @property
+    @classproperty
     def plugin_name(self) -> str:
         """
         Get the name of the plugin.
         By default the class name is used.
         """
-        return self.__class__.__name__
+        return self.__name__
 
     def __print(self, msg: str, out=sys.stdout, **kwargs) -> None:
         # insert the plugin name before the message
