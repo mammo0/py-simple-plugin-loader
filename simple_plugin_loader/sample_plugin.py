@@ -42,12 +42,12 @@ class SamplePlugin(metaclass=SamplePluginMeta):
         self.__print(msg, out=file, **kwargs)
 
     @classproperty
-    def plugin_name(self) -> str:
+    def plugin_name(cls) -> str:
         """
         Get the name of the plugin.
         By default the class name is used.
         """
-        return self.__name__
+        return cls.__name__
 
     def __print(self, msg: str, out: TextIO=sys.stdout, **kwargs) -> None:
         # insert the plugin name before the message

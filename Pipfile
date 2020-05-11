@@ -8,4 +8,4 @@ pytest = "*"
 pipenv-setup = "*"
 
 [packages]
-simple-classproperty = "*"
+simple-classproperty = ">=1.1"
