@@ -10,6 +10,7 @@ the class.
 
 from abc import ABCMeta
 import sys
+from typing import TextIO
 
 from simple_classproperty import ClassPropertyMeta, classproperty
 
@@ -22,25 +23,23 @@ class SamplePlugin(metaclass=SamplePluginMeta):
     """
     You can use this class as a base class that can be loaded with the plugin loader.
     """
-    def print(self, msg: str, **kwargs) -> None:
+    def print(self, msg: str, file: TextIO=sys.stdout, **kwargs) -> None:
         """
-        Print a string to stdout.
+        Print a message.
+        All kwargs of regular 'print' are supported.
+        @param msg: The message to print.
+        @param file: The destination IO stream where the message is printed on (Default: stdout).
+        """
+        self.__print(msg, out=file, **kwargs)
 
-        All kwargs of regular 'print' are supported, except the 'file' argument.
+    def eprint(self, msg: str, file: TextIO=sys.stderr, **kwargs) -> None:
         """
-        if "file" in kwargs:
-            kwargs.pop("file")
-        self.__print(msg, **kwargs)
-
-    def eprint(self, msg: str, **kwargs) -> None:
+        Print a message.
+        All kwargs of regular 'print' are supported.
+        @param msg: The message to print.
+        @param file: The destination IO stream where the message is printed on (Default: stderr).
         """
-        Print a string to stderr.
-
-        All kwargs of regular 'print' are supported, except the 'file' argument.
-        """
-        if "file" in kwargs:
-            kwargs.pop("file")
-        self.__print(msg, sys.stderr, **kwargs)
+        self.__print(msg, out=file, **kwargs)
 
     @classproperty
     def plugin_name(self) -> str:
@@ -50,6 +49,6 @@ class SamplePlugin(metaclass=SamplePluginMeta):
         """
         return self.__name__
 
-    def __print(self, msg: str, out=sys.stdout, **kwargs) -> None:
+    def __print(self, msg: str, out: TextIO=sys.stdout, **kwargs) -> None:
         # insert the plugin name before the message
         print("[%s]: %s" % (self.plugin_name, msg), file=out, **kwargs)
