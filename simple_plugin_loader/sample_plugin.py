@@ -4,19 +4,21 @@ This module contains a sample Plugin class.
 This class can be used as a base class for your plugins.
 It can be used by the plugin loader to identify plugin modules that can be loaded.
 
-Please note: This is an abstract class so your plugin class can use @abstractmethod to define some must have methods of the class.
+Please note: This is an abstract class so your plugin class can use @abstractmethod to define some must have methods of
+the class.
 """
 
-from abc import ABC
+from abc import ABCMeta
 import sys
 
-
-class classproperty(property):
-    def __get__(self, _, owner):
-        return super(classproperty, self).__get__(owner)
+from simple_classproperty import ClassPropertyMeta, classproperty
 
 
-class SamplePlugin(ABC):
+class SamplePluginMeta(ABCMeta, ClassPropertyMeta):
+    pass
+
+
+class SamplePlugin(metaclass=SamplePluginMeta):
     """
     You can use this class as a base class that can be loaded with the plugin loader.
     """
