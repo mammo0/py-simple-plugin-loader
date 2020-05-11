@@ -8,7 +8,7 @@ import git  # noqa
 
 
 # get the description from README.md
-with open("README.md", "r") as readme:
+with open("README.md", 'r') as readme:
     long_description = readme.read()
 
 
@@ -18,19 +18,14 @@ def get_version():
 
     if repo.tags:
         # get the latest tag
-        latest_tag = sorted(
-            repo.tags, key=lambda t: t.commit.committed_date, reverse=True
-        )[0]
+        latest_tag = sorted(repo.tags, key=lambda t: t.commit.committed_date, reverse=True)[0]
         # check if the latest commit is a release
         if repo.head.commit.hexsha == latest_tag.commit.hexsha:
             # just return the release tag
             return latest_tag.name
         else:
             # get amount of commits since the last tag as pre-release
-            commit_count_since_latest_tag = (
-                len(list(repo.iter_commits(max_age=latest_tag.commit.authored_date)))
-                - 1
-            )
+            commit_count_since_latest_tag = len(list(repo.iter_commits(max_age=latest_tag.commit.authored_date))) - 1
             # return a pre-release tag
             return "%s.post%s" % (latest_tag.name, commit_count_since_latest_tag)
     else:
@@ -42,7 +37,6 @@ def get_version():
 
 # the actual setup
 setup(
-    install_requires=["simple-classproperty==1.0.2"],
     name="simple-plugin-loader",
     version=get_version(),
     author="Marc Ammon",
@@ -57,5 +51,5 @@ setup(
         "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
         "Operating System :: OS Independent",
     ],
-    python_requires=">=3.5",
+    python_requires='>=3.5',
 )
