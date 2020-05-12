@@ -11,7 +11,7 @@ import sys
 from simple_plugin_loader.sample_plugin import SamplePlugin
 
 
-class Loader():
+class _Loader():
     def __init__(self):
         self.__available_plugins = {}
 

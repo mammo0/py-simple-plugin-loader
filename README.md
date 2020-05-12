@@ -20,7 +20,7 @@ Otherwise the module can be downloaded from PyPI: https://pypi.org/project/simpl
 
 1. Import the module:
     ```python
-    from plugin_loader.loader import Loader
+    from plugin_loader import Loader
     ```
 2. Load your plugins/modules:
     ```python
@@ -28,7 +28,7 @@ Otherwise the module can be downloaded from PyPI: https://pypi.org/project/simpl
     loader = Loader()
 
     # load your plugins
-    plugins = self.loader.load_plugins(<plugin_path>, <plugin_base_class, <recursive>)
+    plugins = loader.load_plugins(<plugin_path>, <plugin_base_class>, <recursive>)
     ```
 3. **(Optional)** The already loaded plugins/modules can be accessed via the `plugins` property of the loader instance:
    ```python
