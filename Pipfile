@@ -7,4 +7,4 @@ verify_ssl = true
 pytest = "*"
 
 [packages]
-simple-classproperty = ">=1.1"
+simple-classproperty = ">=1.2"

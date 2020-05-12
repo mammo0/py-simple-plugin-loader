@@ -12,10 +12,10 @@ from abc import ABCMeta
 import sys
 from typing import TextIO
 
-from simple_classproperty import ClassPropertyMeta, classproperty
+from simple_classproperty import ClasspropertyMeta, classproperty
 
 
-class SamplePluginMeta(ABCMeta, ClassPropertyMeta):
+class SamplePluginMeta(ABCMeta, ClasspropertyMeta):
     pass
 
 
