@@ -81,8 +81,9 @@ class _Loader():
                         issubclass(attribute, plugin_base_class) and
                         # but do not match the plugin class itself
                         attribute != plugin_base_class):
-                    if hasattr(attribute, "plugin_name"):
-                        # if the plugin is derived from 'SamplePlugin' class, use the 'plugin_name' property as name
+                    # if the plugin is derived from 'SamplePlugin' class,
+                    if issubclass(attribute, SamplePlugin):
+                        # use the 'plugin_name' property as name
                         pn = attribute.plugin_name
                     else:
                         # otherwise simply use the class name
