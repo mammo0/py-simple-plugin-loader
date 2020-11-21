@@ -45,7 +45,7 @@ Otherwise the module can be downloaded from PyPI: https://pypi.org/project/simpl
   The Loader does not load all found modules that are in the above directory. It only loads classes that are **sub-classes** of the here specified class.</br>
   The default value of this argument is the `SamplePlugin` class. You can use this class as the base class for your plugins:
   ```python
-  from plugin_loader.sample_plugin import SamplePlugin
+  from simple_plugin_loader.sample_plugin import SamplePlugin
 
   class YourPlugin(SamplePlugin):
       pass
