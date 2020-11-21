@@ -20,7 +20,7 @@ Otherwise the module can be downloaded from PyPI: https://pypi.org/project/simpl
 
 1. Import the module:
     ```python
-    from plugin_loader import Loader
+    from simple_plugin_loader import Loader
     ```
 2. Load your plugins/modules:
     ```python
