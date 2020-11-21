@@ -13,13 +13,13 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.5, 3.6, 3.7, 3.8]
+        python-version: [3.6, 3.7, 3.8]
     steps:
         # checkout the repo
         - uses: actions/checkout@v2
         # setup python environment
         - name: Set up Python ${{ matrix.python-version }}
-          uses: actions/setup-python@v1
+          uses: actions/setup-python@v2
           with:
             python-version: ${{ matrix.python-version }}
         # install the test dependencies
@@ -45,10 +45,10 @@ jobs:
         # also fetch all tags
         - run: git fetch origin +refs/tags/*:refs/tags/*
         # setup python environment
-        - name: Set up Python 3.5
-          uses: actions/setup-python@v1
+        - name: Set up Python 3.6
+          uses: actions/setup-python@v2
           with:
-            python-version: "3.5"
+            python-version: "3.6"
         # install the build dependencies
         - name: Install build dependencies
           run: |
