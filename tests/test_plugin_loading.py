@@ -25,7 +25,8 @@ class Test(unittest.TestCase):
         self.assertIsInstance(plugin, TestPlugin)
 
     def test_load_non_recursive(self):
-        plugins = self.loader.load_plugins(PLUGIN_PATH, TestPlugin, False)
+        plugins = self.loader.load_plugins(
+            PLUGIN_PATH, TestPlugin, recursive=False)
 
         self.check_plugin_loaded(plugins, "plugin1")
 
@@ -33,11 +34,21 @@ class Test(unittest.TestCase):
         self.assertNotIn("subplugin1", plugins)
 
     def test_load_recursive(self):
-        plugins = self.loader.load_plugins(PLUGIN_PATH, TestPlugin, True)
+        plugins = self.loader.load_plugins(
+            PLUGIN_PATH, TestPlugin, recursive=True)
 
         self.check_plugin_loaded(plugins, "plugin1")
         self.check_plugin_loaded(plugins, "subplugin1")
         self.check_plugin_loaded(plugins, "subplugin2")
+
+    def test_load_specific_plugins(self):
+        plugins = self.loader.load_plugins(PLUGIN_PATH, TestPlugin, [
+                                           'plugin1'], True, True)
+
+        self.check_plugin_loaded(plugins, "plugin1")
+        self.check_plugin_loaded(plugins, "subplugin2")
+
+        self.assertNotIn("subplugin1", plugins)
 
     def test_load_plugins_from_package_not_in_path(self):
         # this path is not in the current sys.path

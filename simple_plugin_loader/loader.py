@@ -23,11 +23,13 @@ class _Loader():
         return self.__available_plugins
 
     def load_plugins(self, path: str,
-                     plugin_base_class: type=SamplePlugin,
-                     recursive: bool=False,
-                     verbose: bool=False) -> dict:
+                     plugin_base_class: type = SamplePlugin,
+                     specific_plugins: list[str] = [],
+                     recursive: bool = False,
+                     verbose: bool = False) -> dict:
         """
         Load all classes in a directory specified by 'path' that match the 'plugin_base_class' class.
+        specific_plugins need to be the file name
 
         All other classes or methods are ignored.
         """
@@ -44,8 +46,10 @@ class _Loader():
 
         # do the actual import
         plugins = self.__load(path,
-                              os.path.basename(path),  # the module main package is the last directory of the path
+                              # the module main package is the last directory of the path
+                              os.path.basename(path),
                               plugin_base_class,
+                              specific_plugins,
                               recursive,
                               verbose)
 
@@ -59,9 +63,10 @@ class _Loader():
 
     def __load(self, path: str,
                package_name: str,
-               plugin_base_class: type=SamplePlugin,
-               recursive: bool=False,
-               verbose: bool=False) -> dict:
+               plugin_base_class: type = SamplePlugin,
+               specific_plugins: list[str] = [],
+               recursive: bool = False,
+               verbose: bool = False) -> dict:
         plugins = {}
         # iterate over the modules that are within the path
         for (_, name, ispkg) in pkgutil.iter_modules([path]):
@@ -70,12 +75,19 @@ class _Loader():
                     plugins.update(self.__load(os.path.join(path, name),
                                                ".".join([package_name, name]),
                                                plugin_base_class,
+                                               specific_plugins,
                                                recursive,
                                                verbose))
                     continue
                 else:
                     # do not try to import it, since it's not a module
                     continue
+
+            if len(specific_plugins) > 0 and name not in specific_plugins:
+                if verbose:
+                    print("Skipping plugin %s" %
+                          (".".join([package_name, name])))
+                continue
 
             # import the module
             try:
