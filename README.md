@@ -36,6 +36,9 @@ Otherwise the module can be downloaded from PyPI: https://pypi.org/project/simpl
    ```
 
 ### `load_plugins(...)` Method
+This method does the actual plugin loading.
+
+It loads only Python modules that can be executed in the current environment. If a module e.g. contains syntax errors or depends on other not installed Python modules, it will be skipped. So the main program does not fail completely.
 
 ##### Arguments
 

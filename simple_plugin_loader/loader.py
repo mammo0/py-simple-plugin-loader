@@ -69,7 +69,10 @@ class _Loader():
                     continue
 
             # import the module
-            imported_module = import_module(".".join([package_name, name]))
+            try:
+                imported_module = import_module(".".join([package_name, name]))
+            except ModuleNotFoundError as e:
+                continue
 
             plugin_found = False
             # try to find a subclass of the plugin class
