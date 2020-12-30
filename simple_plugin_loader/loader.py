@@ -102,13 +102,14 @@ class _Loader():
                 # first check if it's a class
                 if (inspect.isclass(attribute) and
                         # check if only specific plugins should be loaded
-                        (specific_plugins and
+                        ((specific_plugins and
                             # they must match the name case sensitive
                             attribute.__name__ in specific_plugins) or
-                        # otherwise check for plugin subclass
-                        (issubclass(attribute, plugin_base_class) and
-                         # but do not match the plugin class itself
-                         attribute != plugin_base_class)):
+                         # otherwise check for plugin subclass
+                         (not specific_plugins and
+                            issubclass(attribute, plugin_base_class) and
+                            # but do not match the plugin class itself
+                            attribute != plugin_base_class))):
                     # if the plugin is derived from 'SamplePlugin' class,
                     if issubclass(attribute, SamplePlugin):
                         # use the 'plugin_name' property as name
