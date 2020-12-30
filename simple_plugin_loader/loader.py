@@ -7,6 +7,7 @@ import inspect
 import os
 import pkgutil
 import sys
+from typing import List
 
 from simple_plugin_loader.sample_plugin import SamplePlugin
 
@@ -24,7 +25,7 @@ class _Loader():
 
     def load_plugins(self, path: str,
                      plugin_base_class: type=SamplePlugin,
-                     specific_plugins: list[str]=[],
+                     specific_plugins: List[str]=[],
                      recursive: bool=False,
                      verbose: bool=False) -> dict:
         """
@@ -65,7 +66,7 @@ class _Loader():
     def __load(self, path: str,
                package_name: str,
                plugin_base_class: type=SamplePlugin,
-               specific_plugins: list[str]=[],
+               specific_plugins: List[str]=[],
                recursive: bool=False,
                verbose: bool=False) -> dict:
         plugins = {}
