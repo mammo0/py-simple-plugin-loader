@@ -23,10 +23,10 @@ class _Loader():
         return self.__available_plugins
 
     def load_plugins(self, path: str,
-                     plugin_base_class: type = SamplePlugin,
-                     specific_plugins: list[str] = [],
-                     recursive: bool = False,
-                     verbose: bool = False) -> dict:
+                     plugin_base_class: type=SamplePlugin,
+                     specific_plugins: list[str]=[],
+                     recursive: bool=False,
+                     verbose: bool=False) -> dict:
         """
         Load all classes in a directory specified by 'path' that match the 'plugin_base_class' class.
         Alternatively if the 'specific_plugins' list contains class names, only those will be loaded.
@@ -64,10 +64,10 @@ class _Loader():
 
     def __load(self, path: str,
                package_name: str,
-               plugin_base_class: type = SamplePlugin,
-               specific_plugins: list[str] = [],
-               recursive: bool = False,
-               verbose: bool = False) -> dict:
+               plugin_base_class: type=SamplePlugin,
+               specific_plugins: list[str]=[],
+               recursive: bool=False,
+               verbose: bool=False) -> dict:
         plugins = {}
         # iterate over the modules that are within the path
         for (_, name, ispkg) in pkgutil.iter_modules([path]):
