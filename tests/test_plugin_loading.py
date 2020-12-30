@@ -1,4 +1,6 @@
+from io import StringIO
 import os
+import sys
 import unittest
 
 from simple_plugin_loader import Loader
@@ -24,14 +26,38 @@ class Test(unittest.TestCase):
         # the class must be an instance of 'TestPlugin'
         self.assertIsInstance(plugin, TestPlugin)
 
-    def test_load_non_recursive(self):
-        plugins = self.loader.load_plugins(
-            PLUGIN_PATH, TestPlugin, recursive=False)
+    def load_non_recursive(self, verbose):
+        plugins = self.loader.load_plugins(PLUGIN_PATH, TestPlugin, recursive=False, verbose)
 
         self.check_plugin_loaded(plugins, "plugin1")
 
+        # the 'Plugin2WithErrors' must not be in the imported plugin list, because it contains errors
+        self.assertNotIn("plugin2witherrors", plugins)
+
         # the 'SubPlugin1' must not be in the imported plugin list because the import was done none recursively
         self.assertNotIn("subplugin1", plugins)
+
+    def test_load_non_recursive_without_verbose(self):
+        # load plugins without verbosity
+        self.load_non_recursive(False)
+
+    def test_load_non_recursive_with_verbose(self):
+        # catch output
+        stdout = sys.stdout
+        stderr = sys.stderr
+        sys.stdout = temp_stdout = StringIO()
+        sys.stderr = temp_stderr = StringIO()
+
+        # load plugins with verbosity
+        self.load_non_recursive(True)
+
+        # check output
+        self.assertIn("Imported plugin Plugin1 as plugin1", temp_stdout.getvalue())
+        self.assertIn("Can't import module 'test_plugins.plugin2_with_errors'!", temp_stderr.getvalue())
+
+        # restore output
+        sys.stdout = stdout
+        sys.stderr = stderr
 
     def test_load_recursive(self):
         plugins = self.loader.load_plugins(
