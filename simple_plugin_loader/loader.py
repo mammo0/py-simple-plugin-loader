@@ -48,8 +48,7 @@ class _Loader():
 
         # do the actual import
         plugins = self.__load(path,
-                              # the module main package is the last directory of the path
-                              os.path.basename(path),
+                              os.path.basename(path),  # the module main package is the last directory of the path
                               plugin_base_class,
                               specific_plugins,
                               recursive,
