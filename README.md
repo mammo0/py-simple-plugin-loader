@@ -28,7 +28,7 @@ Otherwise the module can be downloaded from PyPI: https://pypi.org/project/simpl
     loader = Loader()
 
     # load your plugins
-    plugins = loader.load_plugins(<plugin_path>, <plugin_base_class>, <recursive>, <verbose>)
+    plugins = loader.load_plugins(<plugin_path>, <plugin_base_class>, <specific_plugins>, <recursive>, <verbose>)
     ```
 3. **(Optional)** The already loaded plugins/modules can be accessed via the `plugins` property of the loader instance:
    ```python
@@ -53,6 +53,8 @@ It loads only Python modules that can be executed in the current environment. If
   class YourPlugin(SamplePlugin):
       pass
   ```
+- `<specific_plugins>`: _List[str]_ (Default: `[]`)</br>
+  This list can contain **case sensitive** class names, that should be loaded. Then no other plugins will be loaded. The argument `<plugin_base_class>` will also be ignored, so any class can be loaded.
 - `<recursive>`: _bool_ (Default: `False`)</br>
   Set this flag to `True` if you wish to load plugins/modules recursively to the above directory.
 - `<verbose>`: _bool_ (Default: `False`)</br>
