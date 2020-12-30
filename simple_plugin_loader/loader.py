@@ -7,6 +7,7 @@ import inspect
 import os
 import pkgutil
 import sys
+from typing import List
 
 from simple_plugin_loader.sample_plugin import SamplePlugin
 
@@ -24,10 +25,13 @@ class _Loader():
 
     def load_plugins(self, path: str,
                      plugin_base_class: type=SamplePlugin,
+                     specific_plugins: List[str]=[],
                      recursive: bool=False,
                      verbose: bool=False) -> dict:
         """
         Load all classes in a directory specified by 'path' that match the 'plugin_base_class' class.
+        Alternatively if the 'specific_plugins' list contains class names, only those will be loaded.
+        They don't need to be subclasses of e.g. 'SamplePlugin'.
 
         All other classes or methods are ignored.
         """
@@ -46,6 +50,7 @@ class _Loader():
         plugins = self.__load(path,
                               os.path.basename(path),  # the module main package is the last directory of the path
                               plugin_base_class,
+                              specific_plugins,
                               recursive,
                               verbose)
 
@@ -60,6 +65,7 @@ class _Loader():
     def __load(self, path: str,
                package_name: str,
                plugin_base_class: type=SamplePlugin,
+               specific_plugins: List[str]=[],
                recursive: bool=False,
                verbose: bool=False) -> dict:
         plugins = {}
@@ -70,6 +76,7 @@ class _Loader():
                     plugins.update(self.__load(os.path.join(path, name),
                                                ".".join([package_name, name]),
                                                plugin_base_class,
+                                               specific_plugins,
                                                recursive,
                                                verbose))
                     continue
@@ -92,11 +99,17 @@ class _Loader():
             for i in dir(imported_module):
                 attribute = getattr(imported_module, i)
 
+                # first check if it's a class
                 if (inspect.isclass(attribute) and
-                        # check for plugin subclass
-                        issubclass(attribute, plugin_base_class) and
-                        # but do not match the plugin class itself
-                        attribute != plugin_base_class):
+                        # check if only specific plugins should be loaded
+                        ((specific_plugins and
+                            # they must match the name case sensitive
+                            attribute.__name__ in specific_plugins) or
+                         # otherwise check for plugin subclass
+                         (not specific_plugins and
+                            issubclass(attribute, plugin_base_class) and
+                            # but do not match the plugin class itself
+                            attribute != plugin_base_class))):
                     # if the plugin is derived from 'SamplePlugin' class,
                     if issubclass(attribute, SamplePlugin):
                         # use the 'plugin_name' property as name
