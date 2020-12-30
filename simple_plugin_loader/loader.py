@@ -29,7 +29,8 @@ class _Loader():
                      verbose: bool = False) -> dict:
         """
         Load all classes in a directory specified by 'path' that match the 'plugin_base_class' class.
-        specific_plugins need to be the file name
+        Alternatively if the 'specific_plugins' list contains class names, only those will be loaded.
+        They don't need to be subclasses of e.g. 'SamplePlugin'.
 
         All other classes or methods are ignored.
         """
@@ -83,12 +84,6 @@ class _Loader():
                     # do not try to import it, since it's not a module
                     continue
 
-            if len(specific_plugins) > 0 and name not in specific_plugins:
-                if verbose:
-                    print("Skipping plugin %s" %
-                          (".".join([package_name, name])))
-                continue
-
             # import the module
             try:
                 imported_module = import_module(".".join([package_name, name]))
@@ -104,11 +99,16 @@ class _Loader():
             for i in dir(imported_module):
                 attribute = getattr(imported_module, i)
 
+                # first check if it's a class
                 if (inspect.isclass(attribute) and
-                        # check for plugin subclass
-                        issubclass(attribute, plugin_base_class) and
-                        # but do not match the plugin class itself
-                        attribute != plugin_base_class):
+                        # check if only specific plugins should be loaded
+                        (specific_plugins and
+                            # they must match the name case sensitive
+                            attribute.__name__ in specific_plugins) or
+                        # otherwise check for plugin subclass
+                        (issubclass(attribute, plugin_base_class) and
+                         # but do not match the plugin class itself
+                         attribute != plugin_base_class)):
                     # if the plugin is derived from 'SamplePlugin' class,
                     if issubclass(attribute, SamplePlugin):
                         # use the 'plugin_name' property as name
