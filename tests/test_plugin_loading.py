@@ -27,7 +27,7 @@ class Test(unittest.TestCase):
         self.assertIsInstance(plugin, TestPlugin)
 
     def load_non_recursive(self, verbose):
-        plugins = self.loader.load_plugins(PLUGIN_PATH, TestPlugin, recursive=False, verbose)
+        plugins = self.loader.load_plugins(PLUGIN_PATH, TestPlugin, recursive=False, verbose=verbose)
 
         self.check_plugin_loaded(plugins, "plugin1")
 
@@ -60,21 +60,21 @@ class Test(unittest.TestCase):
         sys.stderr = stderr
 
     def test_load_recursive(self):
-        plugins = self.loader.load_plugins(
-            PLUGIN_PATH, TestPlugin, recursive=True)
+        plugins = self.loader.load_plugins(PLUGIN_PATH, TestPlugin, recursive=True)
 
         self.check_plugin_loaded(plugins, "plugin1")
         self.check_plugin_loaded(plugins, "subplugin1")
         self.check_plugin_loaded(plugins, "subplugin2")
 
     def test_load_specific_plugins(self):
-        plugins = self.loader.load_plugins(PLUGIN_PATH, TestPlugin, [
-                                           'plugin1'], True, True)
+        # normally the class 'Plugin3NoSubclass' should not be loaded
+        plugins = self.loader.load_plugins(PLUGIN_PATH, TestPlugin)
+        self.assertNotIn("plugin3nosubclass", plugins)
 
-        self.check_plugin_loaded(plugins, "plugin1")
-        self.check_plugin_loaded(plugins, "subplugin2")
-
-        self.assertNotIn("subplugin1", plugins)
+        # now specify the class 'Plugin3NoSubclass' explicitly
+        plugins = self.loader.load_plugins(PLUGIN_PATH, specific_plugins=['Plugin3NoSubclass'])
+        self.assertIn("plugin3nosubclass", plugins)
+        self.assertNotIn("plugin1", plugins)
 
     def test_load_plugins_from_package_not_in_path(self):
         # this path is not in the current sys.path
