@@ -6,6 +6,7 @@ on:
       - master
     tags:
       - v*
+  pull_request:
 
 jobs:
   test:
@@ -35,6 +36,7 @@ jobs:
 
   build-publish:
     name: Build and publish package
+    if: ${{ github.event_name == 'push' }}
     needs: test
     runs-on: ubuntu-latest
     steps:
