@@ -29,6 +29,9 @@ class Test(unittest.TestCase):
 
         self.check_plugin_loaded(plugins, "plugin1")
 
+        # the 'Plugin2WithErrors' must not be in the imported plugin list, because it contains errors
+        self.assertNotIn("plugin2witherrors", plugins)
+
         # the 'SubPlugin1' must not be in the imported plugin list because the import was done none recursively
         self.assertNotIn("subplugin1", plugins)
 
