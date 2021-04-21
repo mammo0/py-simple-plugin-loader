@@ -1,0 +1,12 @@
+version: 2
+updates:
+  # pipenv
+  - package-ecosystem: "pip"
+    directory: "/" # Location of package manifests
+    schedule:
+      interval: "weekly"
+  # GH actions
+  - package-ecosystem: "github-actions"
+    directory: "/" # Location of package manifests
+    schedule:
+      interval: "monthly"
