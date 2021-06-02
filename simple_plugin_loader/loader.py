@@ -4,6 +4,7 @@ This module can load Python modules by path.
 
 from importlib import import_module
 import inspect
+import logging
 import os
 import pkgutil
 import sys
@@ -16,6 +17,8 @@ class _Loader():
     def __init__(self):
         self.__available_plugins = {}
 
+        self.log = logging.getLogger(__name__)
+
     @property
     def plugins(self):
         """
@@ -26,8 +29,7 @@ class _Loader():
     def load_plugins(self, path: str,
                      plugin_base_class: type=SamplePlugin,
                      specific_plugins: List[str]=[],
-                     recursive: bool=False,
-                     verbose: bool=False) -> dict:
+                     recursive: bool=False) -> dict:
         """
         Load all classes in a directory specified by 'path' that match the 'plugin_base_class' class.
         Alternatively if the 'specific_plugins' list contains class names, only those will be loaded.
@@ -51,8 +53,7 @@ class _Loader():
                               os.path.basename(path),  # the module main package is the last directory of the path
                               plugin_base_class,
                               specific_plugins,
-                              recursive,
-                              verbose)
+                              recursive)
 
         # reset the modified path again
         if (sys_path_modified and
@@ -66,8 +67,7 @@ class _Loader():
                package_name: str,
                plugin_base_class: type=SamplePlugin,
                specific_plugins: List[str]=[],
-               recursive: bool=False,
-               verbose: bool=False) -> dict:
+               recursive: bool=False) -> dict:
         plugins = {}
         # iterate over the modules that are within the path
         for (_, name, ispkg) in pkgutil.iter_modules([path]):
@@ -77,8 +77,7 @@ class _Loader():
                                                ".".join([package_name, name]),
                                                plugin_base_class,
                                                specific_plugins,
-                                               recursive,
-                                               verbose))
+                                               recursive))
                     continue
                 else:
                     # do not try to import it, since it's not a module
@@ -88,10 +87,8 @@ class _Loader():
             try:
                 imported_module = import_module(".".join([package_name, name]))
             except ModuleNotFoundError as e:
-                if verbose:
-                    print("\n".join(["Can't import module '%s'! Skipping it." % ".".join([package_name, name]),
-                                     "Error: %s" % str(e)]),
-                          file=sys.stderr)
+                self.log.error("Can't import module '%s'! (%s) -> Skipping it.",
+                               ".".join([package_name, name]), str(e))
                 continue
 
             plugin_found = False
@@ -121,8 +118,7 @@ class _Loader():
                     plugins[pn.casefold()] = attribute
                     plugin_found = True
 
-                    if verbose:
-                        print("Imported plugin %s as %s" % (pn, pn.casefold()))
+                    self.log.info("Imported plugin %s as %s", pn, pn.casefold())
 
             # remove imported module again if no plugin class is found
             if not plugin_found:
