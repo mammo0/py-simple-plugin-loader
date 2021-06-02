@@ -1,9 +1,9 @@
-from io import StringIO
+import logging
 import os
-import sys
 import unittest
 
 from simple_plugin_loader import Loader
+import simple_plugin_loader
 from tests.test_plugins.test_plugin_main import TestPlugin
 
 
@@ -26,8 +26,11 @@ class Test(unittest.TestCase):
         # the class must be an instance of 'TestPlugin'
         self.assertIsInstance(plugin, TestPlugin)
 
-    def load_non_recursive(self, verbose):
-        plugins = self.loader.load_plugins(PLUGIN_PATH, TestPlugin, recursive=False, verbose=verbose)
+    def test_load_non_recursive(self):
+        # in this test also test the logging of the plugin loader
+        with self.assertLogs(logging.getLogger(simple_plugin_loader.__name__), level=logging.INFO) as log:
+            # load plugins
+            plugins = self.loader.load_plugins(PLUGIN_PATH, TestPlugin, recursive=False)
 
         self.check_plugin_loaded(plugins, "plugin1")
 
@@ -37,27 +40,13 @@ class Test(unittest.TestCase):
         # the 'SubPlugin1' must not be in the imported plugin list because the import was done none recursively
         self.assertNotIn("subplugin1", plugins)
 
-    def test_load_non_recursive_without_verbose(self):
-        # load plugins without verbosity
-        self.load_non_recursive(False)
-
-    def test_load_non_recursive_with_verbose(self):
-        # catch output
-        stdout = sys.stdout
-        stderr = sys.stderr
-        sys.stdout = temp_stdout = StringIO()
-        sys.stderr = temp_stderr = StringIO()
-
-        # load plugins with verbosity
-        self.load_non_recursive(True)
-
         # check output
-        self.assertIn("Imported plugin Plugin1 as plugin1", temp_stdout.getvalue())
-        self.assertIn("Can't import module 'test_plugins.plugin2_with_errors'!", temp_stderr.getvalue())
-
-        # restore output
-        sys.stdout = stdout
-        sys.stderr = stderr
+        self.assertEqual(len(log.output), 2)  # there must be two logged messages
+        for msg in log.output:
+            if msg.startswith("INFO"):
+                self.assertIn("Imported plugin Plugin1 as plugin1", msg)
+            else:
+                self.assertIn("Can't import module 'test_plugins.plugin2_with_errors'!", msg)
 
     def test_load_recursive(self):
         plugins = self.loader.load_plugins(PLUGIN_PATH, TestPlugin, recursive=True)
