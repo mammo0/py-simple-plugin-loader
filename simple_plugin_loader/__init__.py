@@ -1,4 +1,4 @@
-from simple_plugin_loader.loader import _Loader
+from .loader import _Loader
 
 
 __all__ = ["Loader"]

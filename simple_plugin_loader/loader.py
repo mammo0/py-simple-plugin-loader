@@ -9,7 +9,7 @@ import pkgutil
 import sys
 from typing import List
 
-from simple_plugin_loader.sample_plugin import SamplePlugin
+from .sample_plugin import SamplePlugin
 
 
 class _Loader():
