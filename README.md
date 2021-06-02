@@ -28,17 +28,19 @@ Otherwise the module can be downloaded from PyPI: https://pypi.org/project/simpl
     loader = Loader()
 
     # load your plugins
-    plugins = loader.load_plugins(<plugin_path>, <plugin_base_class>, <specific_plugins>, <recursive>, <verbose>)
+    plugins = loader.load_plugins(<plugin_path>, <plugin_base_class>, <specific_plugins>, <recursive>)
     ```
 3. **(Optional)** The already loaded plugins/modules can be accessed via the `plugins` property of the loader instance:
    ```python
    plugins = loader.plugins
-   ```
+   ``` 
 
 ### `load_plugins(...)` Method
 This method does the actual plugin loading.
 
-It loads only Python modules that can be executed in the current environment. If a module e.g. contains syntax errors or depends on other not installed Python modules, it will be skipped. So the main program does not fail completely.
+It loads only Python modules that can be executed in the current environment. For every successfully loaded module a message is populated through the Python `logging` library (log level: `INFO`).
+
+If a module e.g. contains syntax errors or depends on other not installed Python modules, it will be skipped. So the main program does not fail completely. An error message is populated through the Python `logging` library (log level: `ERROR`).
 
 ##### Arguments
 
@@ -57,8 +59,6 @@ It loads only Python modules that can be executed in the current environment. If
   This list can contain **case sensitive** class names, that should be loaded. Then no other plugins will be loaded. The argument `<plugin_base_class>` will also be ignored, so any class can be loaded.
 - `<recursive>`: _bool_ (Default: `False`)</br>
   Set this flag to `True` if you wish to load plugins/modules recursively to the above directory.
-- `<verbose>`: _bool_ (Default: `False`)</br>
-  This flag controls the debug output of this method. If enabled, information about (not) loaded plugins/modules are printed.
 
 ##### Return value
 
