@@ -46,6 +46,9 @@ setup(
     long_description_content_type="text/markdown",
     url="https://github.com/mammo0/py-simple-plugin-loader",
     packages=["simple_plugin_loader"],
+    package_data={
+        'simple_plugin_loader': ['py.typed'],
+    },
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
