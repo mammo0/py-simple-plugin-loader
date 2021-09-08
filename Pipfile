@@ -5,6 +5,7 @@ verify_ssl = true
 
 [dev-packages]
 pytest = "*"
+mypy = "*"
 
 [packages]
 simple-classproperty = ">=1.2"
