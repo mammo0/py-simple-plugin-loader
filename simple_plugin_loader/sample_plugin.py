@@ -12,7 +12,7 @@ from abc import ABCMeta
 import sys
 from typing import TextIO
 
-from simple_classproperty import ClasspropertyMeta, classproperty
+from simple_classproperty import ClasspropertyMeta, classproperty  # type: ignore
 
 
 class SamplePluginMeta(ABCMeta, ClasspropertyMeta):
@@ -47,7 +47,7 @@ class SamplePlugin(metaclass=SamplePluginMeta):
         Get the name of the plugin.
         By default the class name is used.
         """
-        return cls.__name__
+        return cls.__name__  # type: ignore
 
     def __print(self, msg: str, out: TextIO=sys.stdout, **kwargs) -> None:
         # insert the plugin name before the message
