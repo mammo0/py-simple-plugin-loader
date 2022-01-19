@@ -3,6 +3,7 @@ This module can load Python modules by path.
 """
 
 from importlib import import_module
+from importlib.machinery import FileFinder
 import inspect
 from logging import Logger
 import logging
@@ -83,8 +84,11 @@ class _Loader():
         The arguments are the same as the of the load_plugins method.
         """
         plugins: Dict[str, type] = {}
+
+        # use the FileFinder from pkgutil to find the modules
+        importer = FileFinder(path=path)
         # iterate over the modules that are within the path
-        for (_, name, ispkg) in pkgutil.iter_modules([path]):
+        for name, ispkg in pkgutil.iter_importer_modules(importer):  # type: ignore
             if ispkg:
                 if recursive:
                     plugins.update(self.__load(os.path.join(path, name),
