@@ -81,6 +81,13 @@ class Test(unittest.TestCase):
 
         self.check_plugin_loaded(plugins, "simpleplugin")
 
+    def test_load_plugin_with_external_dependencies(self) -> None:
+        plugins_dir: str = os.path.join(PLUGIN_PATH, "complex_plugin")
+
+        plugins: Dict[str, type] = self.loader.load_plugins(plugins_dir, TestPlugin)
+
+        self.check_plugin_loaded(plugins, "pluginwithexternaldep")
+
 
 if __name__ == "__main__":
     unittest.main()
