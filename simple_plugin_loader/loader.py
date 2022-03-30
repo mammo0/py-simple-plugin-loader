@@ -11,7 +11,7 @@ import os
 import pkgutil
 import sys
 from types import ModuleType
-from typing import List, Dict
+from typing import List, Dict, Tuple
 
 from .sample_plugin import SamplePlugin
 
@@ -87,10 +87,17 @@ class _Loader():
 
         # use the FileFinder from pkgutil to find the modules
         importer: FileFinder = FileFinder(path=path)
+        found_modules: List[Tuple[str, bool]] = list(pkgutil.iter_importer_modules(importer))  # type: ignore
+
+        # check if in the current path are only packages
+        only_packages: bool = all([m[1] for m in found_modules])
+
         # iterate over the modules that are within the path
-        for name, ispkg in pkgutil.iter_importer_modules(importer):  # type: ignore
+        for name, ispkg in found_modules:
             if ispkg:
-                if recursive:
+                # search in the package if recursive search is requested
+                # or if only packages are found in the path -> try to find plugin modules one level down
+                if recursive or only_packages:
                     plugins.update(self.__load(os.path.join(path, name),
                                                ".".join([package_name, name]),
                                                plugin_base_class,
