@@ -74,6 +74,13 @@ class Test(unittest.TestCase):
 
         self.check_plugin_loaded(plugins, "subplugin1")
 
+    def test_load_multiple_plugins_from_dir(self) -> None:
+        plugins_dir: str = os.path.join(PLUGIN_PATH, "dir_with_only_package")
+
+        plugins: Dict[str, type] = self.loader.load_plugins(plugins_dir, TestPlugin, recursive=False)
+
+        self.check_plugin_loaded(plugins, "simpleplugin")
+
 
 if __name__ == "__main__":
     unittest.main()
