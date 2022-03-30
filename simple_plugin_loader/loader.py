@@ -86,7 +86,7 @@ class _Loader():
         plugins: Dict[str, type] = {}
 
         # use the FileFinder from pkgutil to find the modules
-        importer = FileFinder(path=path)
+        importer: FileFinder = FileFinder(path=path)
         # iterate over the modules that are within the path
         for name, ispkg in pkgutil.iter_importer_modules(importer):  # type: ignore
             if ispkg:
