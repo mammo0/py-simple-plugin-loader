@@ -108,12 +108,19 @@ class _Loader():
                     # do not try to import it, since it's not a module
                     continue
 
+            # add the plugin path to PYTHONPATH (needed if the plugin uses imports relative to the plugin module)
+            self.__add_to_pythonpath(path)
+
             # import the module
             try:
                 imported_module: ModuleType = import_module(".".join([package_name, name]))
             except ModuleNotFoundError as e:
                 self.log.error("Can't import module '%s'! (%s) -> Skipping it.",
                                ".".join([package_name, name]), str(e))
+
+                # remove the path from PYTHONPATH again
+                self.__remove_from_pythonpath(path)
+
                 continue
 
             plugin_found: bool = False
@@ -150,4 +157,27 @@ class _Loader():
             if not plugin_found:
                 del imported_module
 
+                # also remove the path from PYTHONPATH again if the module is not used
+                self.__remove_from_pythonpath(path)
+
         return plugins
+
+    def __add_to_pythonpath(self, path: str) -> None:
+        """
+        Helper method to add a path to the PYTHONPATH.
+        @param path: The path to add.
+        """
+        # only add if it doesn't already exist
+        if path not in sys.path:
+            sys.path.append(path)
+
+    def __remove_from_pythonpath(self, path: str) -> None:
+        """
+        Helper method to remove a path from the PYTHONPATH.
+        @param path: The path to remove.
+        """
+        try:
+            sys.path.remove(path)
+        except ValueError:
+            # ignore if the path wasn't found
+            pass
