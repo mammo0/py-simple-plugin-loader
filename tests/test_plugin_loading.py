@@ -38,8 +38,11 @@ class Test(unittest.TestCase):
         # the 'Plugin2WithErrors' must not be in the imported plugin list, because it contains errors
         self.assertNotIn("plugin2witherrors", plugins)
 
-        # the 'SubPlugin1' must not be in the imported plugin list because the import was done none recursively
+        # the other plugins must not be in the imported plugin list because the import was done none recursively
         self.assertNotIn("subplugin1", plugins)
+        self.assertNotIn("subplugin2", plugins)
+        self.assertNotIn("simpleplugin", plugins)
+        self.assertNotIn("pluginwithexternaldep", plugins)
 
         # check output
         self.assertEqual(len(log.output), 2)  # there must be two logged messages
@@ -47,14 +50,17 @@ class Test(unittest.TestCase):
             if msg.startswith("INFO"):
                 self.assertIn("Imported plugin Plugin1 as plugin1", msg)
             else:
-                self.assertIn("Can't import module 'test_plugins.plugin2_with_errors'!", msg)
+                self.assertIn("Can't import module 'plugin2_with_errors'!", msg)
 
     def test_load_recursive(self) -> None:
         plugins: Dict[str, type] = self.loader.load_plugins(PLUGIN_PATH, TestPlugin, recursive=True)
 
+        # every plugin must be loaded
         self.check_plugin_loaded(plugins, "plugin1")
         self.check_plugin_loaded(plugins, "subplugin1")
         self.check_plugin_loaded(plugins, "subplugin2")
+        self.check_plugin_loaded(plugins, "simpleplugin")
+        self.check_plugin_loaded(plugins, "pluginwithexternaldep")
 
     def test_load_specific_plugins(self) -> None:
         # normally the class 'Plugin3NoSubclass' should not be loaded
@@ -74,7 +80,7 @@ class Test(unittest.TestCase):
 
         self.check_plugin_loaded(plugins, "subplugin1")
 
-    def test_load_multiple_plugins_from_dir(self) -> None:
+    def test_load_from_dir_with_only_package(self) -> None:
         plugins_dir: str = os.path.join(PLUGIN_PATH, "dir_with_only_package")
 
         plugins: Dict[str, type] = self.loader.load_plugins(plugins_dir, TestPlugin, recursive=False)
