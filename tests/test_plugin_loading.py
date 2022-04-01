@@ -1,22 +1,26 @@
 import logging
 import os
-from typing import Dict
+from typing import Dict, List
 import unittest
 
 from simple_plugin_loader import Loader
 import simple_plugin_loader
 from tests.test_plugins.test_plugin_main import TestPlugin
+import sys
 
 
 PLUGIN_PATH = os.path.join(os.path.dirname(__file__), "test_plugins")
 
 
 class Test(unittest.TestCase):
+    default_pythonpath: List[str] = sys.path[:]
+
     def setUp(self) -> None:
         self.loader = Loader()
 
     def tearDown(self) -> None:
         del self.loader
+        sys.path = self.default_pythonpath
 
     def check_plugin_loaded(self, plugin_list: Dict[str, type], plugin_name: str) -> None:
         # the class with the name 'plugin_name' must be in the imported plugin list
@@ -43,6 +47,7 @@ class Test(unittest.TestCase):
         self.assertNotIn("subplugin2", plugins)
         self.assertNotIn("simpleplugin", plugins)
         self.assertNotIn("pluginwithexternaldep", plugins)
+        self.assertNotIn("pluginnotinpackage", plugins)
 
         # check output
         self.assertEqual(len(log.output), 2)  # there must be two logged messages
@@ -61,6 +66,7 @@ class Test(unittest.TestCase):
         self.check_plugin_loaded(plugins, "subplugin2")
         self.check_plugin_loaded(plugins, "simpleplugin")
         self.check_plugin_loaded(plugins, "pluginwithexternaldep")
+        self.check_plugin_loaded(plugins, "pluginnotinpackage")
 
     def test_load_specific_plugins(self) -> None:
         # normally the class 'Plugin3NoSubclass' should not be loaded
@@ -93,6 +99,13 @@ class Test(unittest.TestCase):
         plugins: Dict[str, type] = self.loader.load_plugins(plugins_dir, TestPlugin)
 
         self.check_plugin_loaded(plugins, "pluginwithexternaldep")
+
+    def test_load_plugin_from_normal_directory(self) -> None:
+        plugins_dir: str = os.path.join(PLUGIN_PATH, "not-a-python-package")
+
+        plugins: Dict[str, type] = self.loader.load_plugins(plugins_dir, TestPlugin)
+
+        self.check_plugin_loaded(plugins, "pluginnotinpackage")
 
 
 if __name__ == "__main__":
