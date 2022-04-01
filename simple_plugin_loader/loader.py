@@ -52,11 +52,7 @@ class _Loader():
 
         # add the parent path to the system PATH if it doesn't already exists
         # this is needed for the import later
-        sys_path_modified: bool = False
-        if os.path.dirname(path) not in sys.path:
-            # insert the parent path at index zero, because the loader should look at this location first
-            sys.path.insert(0, os.path.dirname(path))
-            sys_path_modified = True
+        self.__add_to_pythonpath(path)
 
         # do the actual import
         plugins: Dict[str, type] = self.__load(path,
@@ -67,9 +63,7 @@ class _Loader():
                                                recursive)
 
         # reset the modified path again
-        if (sys_path_modified and
-                os.path.dirname(path) in sys.path):
-            sys.path.remove(os.path.dirname(path))
+        self.__remove_from_pythonpath(path)
 
         self.__available_plugins.update(plugins)
         return plugins
@@ -108,18 +102,12 @@ class _Loader():
                     # do not try to import it, since it's not a module
                     continue
 
-            # add the plugin path to PYTHONPATH (needed if the plugin uses imports relative to the plugin module)
-            self.__add_to_pythonpath(path)
-
             # import the module
             try:
                 imported_module: ModuleType = import_module(".".join([package_name, name]))
             except ModuleNotFoundError as e:
                 self.log.error("Can't import module '%s'! (%s) -> Skipping it.",
                                ".".join([package_name, name]), str(e))
-
-                # remove the path from PYTHONPATH again
-                self.__remove_from_pythonpath(path)
 
                 continue
 
@@ -157,9 +145,6 @@ class _Loader():
             if not plugin_found:
                 del imported_module
 
-                # also remove the path from PYTHONPATH again if the module is not used
-                self.__remove_from_pythonpath(path)
-
         return plugins
 
     def __add_to_pythonpath(self, path: str) -> None:
@@ -169,7 +154,8 @@ class _Loader():
         """
         # only add if it doesn't already exist
         if path not in sys.path:
-            sys.path.append(path)
+            # insert the parent path at index zero, because the loader should look at this location first
+            sys.path.insert(0, path)
 
     def __remove_from_pythonpath(self, path: str) -> None:
         """
