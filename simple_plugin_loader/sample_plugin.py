@@ -12,7 +12,7 @@ from abc import ABCMeta
 import sys
 from typing import TextIO
 
-from simple_classproperty import ClasspropertyMeta, classproperty  # type: ignore
+from simple_classproperty import ClasspropertyMeta, classproperty
 
 
 class SamplePluginMeta(ABCMeta, ClasspropertyMeta):
