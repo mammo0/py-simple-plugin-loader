@@ -8,4 +8,4 @@ pytest = "*"
 mypy = "*"
 
 [packages]
-simple-classproperty = ">=1.2"
+simple-classproperty = ">=1.4"
