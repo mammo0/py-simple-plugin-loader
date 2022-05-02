@@ -16,11 +16,11 @@
     "default": {
         "simple-classproperty": {
             "hashes": [
-                "sha256:0235fe1e17bca89730cdfdd8e696ac974d5271a166f11dae0fbfdda2cda9df89",
-                "sha256:9f5bad2140aec61492ef430c957c3d848ebf548f5c03d6af2b7daa45726b739a"
+                "sha256:7dc0382e76e367aa79a26cf3fad0cee5380a124d64e6833c45a8b8ca8788c56b",
+                "sha256:a4bd5c868d013edcb6bf300de79154eec0dbd96960bb529f445c3b94b5df8b19"
             ],
             "index": "pypi",
-            "version": "==1.4.1"
+            "version": "==1.4.2"
         }
     },
     "develop": {
