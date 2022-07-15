@@ -21,6 +21,9 @@ class _Loader():
 
         self.log: Logger = logging.getLogger(__name__)
 
+        # dictionary to save the index where the PYTHONPATH was modified with the corresponding path
+        self.__sys_path_modified_at_index: Dict[str, int] = {}
+
     @property
     def plugins(self) -> Dict[str, type]:
         """
@@ -177,16 +180,23 @@ class _Loader():
         """
         # only add if it doesn't already exist
         if path not in sys.path:
-            # insert the parent path at index zero, because the loader should look at this location first
-            sys.path.insert(0, path)
+            # append the parent path to the PYTHONPATH to find relative imports of the imported module
+            # save the index on which the path is inserted
+            self.__sys_path_modified_at_index[path] = len(sys.path)
+            # add the path
+            sys.path.insert(self.__sys_path_modified_at_index[path], path)
 
     def __remove_from_pythonpath(self, path: str) -> None:
         """
         Helper method to remove a path from the PYTHONPATH.
         @param path: The path to remove.
         """
-        try:
-            sys.path.remove(path)
-        except ValueError:
-            # ignore if the path wasn't found
-            pass
+        if path in self.__sys_path_modified_at_index:
+            # the PYTHONPATH could be modified by an imported module, so check if the saved index is still valid
+            if sys.path[self.__sys_path_modified_at_index[path]] == path:
+                sys.path.pop(self.__sys_path_modified_at_index[path])
+            else:
+                # otherwise remove the last occurence of the path
+                for i in range(len(sys.path) - 1, 0, -1):
+                    if sys.path[i] == path:
+                        sys.path.pop(i)
