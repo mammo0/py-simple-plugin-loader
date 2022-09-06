@@ -23,16 +23,17 @@ jobs:
           uses: actions/setup-python@v4
           with:
             python-version: ${{ matrix.python-version }}
+        - name: Set up Poetry
+          uses: abatilo/actions-poetry@v2
+          with:
+            poetry-version: "1.2"
         # install the test dependencies
         - name: Install test dependencies
           run: |
-            python -m pip install --upgrade pip
-            pip install pipenv
-            pipenv lock --dev --keep-outdated
-            pipenv sync --dev
+            poetry install
         - name: Test package
           run: |
-            pipenv run pytest
+            poetry run pytest
 
   build-publish:
     name: Build and publish package
@@ -43,35 +44,37 @@ jobs:
         # checkout the repo
         - uses: actions/checkout@v3
           with:
-            # fetch complete history because it's needed in setup.py
+            # fetch complete history because it's needed by Poetry
             fetch-depth: 0
-        # also fetch all tags
-        - run: git fetch origin +refs/tags/*:refs/tags/*
         # setup python environment
         - name: Set up Python 3.7
           uses: actions/setup-python@v4
           with:
             python-version: "3.7"
-        # install the build dependencies
-        - name: Install build dependencies
+        - name: Set up Poetry
+          uses: abatilo/actions-poetry@v2
+          with:
+            poetry-version: "1.2"
+        - name: Add dynamic versioning plugin
           run: |
-            python -m pip install --upgrade pip
-            pip install --upgrade setuptools wheel twine pipenv-setup
-        - name: Update setup.py according to Pipfile
-          run: pipenv-setup sync
+            poetry self add "poetry-dynamic-versioning[plugin]"
+        # build the package
         - name: Build package
-          run: python setup.py sdist bdist_wheel
+          run: |
+            poetry build
         # on a regular push publish the package to test PyPI repo
         - name: Publish test package
           env:
-            TWINE_REPOSITORY_URL: https://test.pypi.org/legacy/
-            TWINE_USERNAME: __token__
-            TWINE_PASSWORD: ${{ secrets.PYPI_TEST_TOKEN }}
-          run: twine upload dist/*
+            PYPI_TEST_TOKEN: ${{ secrets.PYPI_TEST_TOKEN }}
+          run: |
+            poetry config repositories.test-pypi https://test.pypi.org/legacy/
+            poetry config pypi-token.test-pypi $PYPI_TEST_TOKEN
+            poetry publish -r test-pypi
         # on a release push publish the package to the regular PyPI repo
         - name: Publish release package
           if: startsWith(github.event.ref, 'refs/tags')
           env:
-            TWINE_USERNAME: __token__
-            TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
-          run: twine upload dist/*
+            PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
+          run: |
+            poetry config pypi-token.pypi $PYPI_TOKEN
+            poetry publish
