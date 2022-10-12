@@ -13,7 +13,7 @@ classifiers = [
 
 [tool.poetry.dependencies]
 python = ">=3.7"
-simple-classproperty = ">=1.4"
+simple-classproperty = ">=3.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^7.1.3"
