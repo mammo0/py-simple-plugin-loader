@@ -10,7 +10,7 @@ python-versions = ">=3.5"
 dev = ["cloudpickle", "coverage[toml] (>=5.0.2)", "furo", "hypothesis", "mypy (>=0.900,!=0.940)", "pre-commit", "pympler", "pytest (>=4.3.0)", "pytest-mypy-plugins", "sphinx", "sphinx-notfound-page", "zope.interface"]
 docs = ["furo", "sphinx", "sphinx-notfound-page", "zope.interface"]
 tests = ["cloudpickle", "coverage[toml] (>=5.0.2)", "hypothesis", "mypy (>=0.900,!=0.940)", "pympler", "pytest (>=4.3.0)", "pytest-mypy-plugins", "zope.interface"]
-tests_no_zope = ["cloudpickle", "coverage[toml] (>=5.0.2)", "hypothesis", "mypy (>=0.900,!=0.940)", "pympler", "pytest (>=4.3.0)", "pytest-mypy-plugins"]
+tests-no-zope = ["cloudpickle", "coverage[toml] (>=5.0.2)", "hypothesis", "mypy (>=0.900,!=0.940)", "pympler", "pytest (>=4.3.0)", "pytest-mypy-plugins"]
 
 [[package]]
 name = "colorama"
@@ -140,11 +140,11 @@ testing = ["argcomplete", "hypothesis (>=3.56)", "mock", "nose", "pygments (>=2.
 
 [[package]]
 name = "simple-classproperty"
-version = "2.0.0"
+version = "3.0.0"
 description = "Provides a 'classproperty' decorator."
 category = "main"
 optional = false
-python-versions = ">=3.7,<3.9"
+python-versions = ">=3.7"
 
 [[package]]
 name = "tomli"
@@ -185,7 +185,7 @@ testing = ["func-timeout", "jaraco.itertools", "pytest (>=6)", "pytest-black (>=
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.7"
-content-hash = "c8c6c9abf1db7a05068f5841c7057e55758ae2dc8cbcaecc7f0862c7ae99b170"
+content-hash = "16a7c388f232c39c8b7138caa90f5ae834982a385ce7f97ea0e57a56f5e3ea2c"
 
 [metadata.files]
 attrs = [
@@ -255,8 +255,8 @@ pytest = [
     {file = "pytest-7.1.3.tar.gz", hash = "sha256:4f365fec2dff9c1162f834d9f18af1ba13062db0c708bf7b946f8a5c76180c39"},
 ]
 simple-classproperty = [
-    {file = "simple-classproperty-2.0.0.tar.gz", hash = "sha256:b04213da5ec3ab483691de1ccf2049ee9367c212348cb5ae83d11090442a58f6"},
-    {file = "simple_classproperty-2.0.0-py3-none-any.whl", hash = "sha256:c82af9cf2450ad450d748a9259ddfe0db54886ac3b603d4aa48cf47960d04115"},
+    {file = "simple-classproperty-3.0.0.tar.gz", hash = "sha256:16f875106dea9629b60361c93166d544d7fea5600702236ad11942b47c7087c4"},
+    {file = "simple_classproperty-3.0.0-py3-none-any.whl", hash = "sha256:1d3a1db29f88c46710ffcf8928b9dedc2dacb3851f1feb8437dc12a357b20e9e"},
 ]
 tomli = [
     {file = "tomli-2.0.1-py3-none-any.whl", hash = "sha256:939de3e7a6161af0c887ef91b7d41a53e7c5a1ca976325f429cb46ea9bc30ecc"},

@@ -12,22 +12,7 @@ from abc import ABCMeta
 import sys
 from typing import TextIO
 
-# Python <3.9 does not support class properties natively
-if sys.version_info[:2] < (3, 9):
-    # use a library to get the desired behavior
-    from simple_classproperty import ClasspropertyMeta, classproperty
-else:
-    # TODO: when Python 3.8 gets EOL, remove this if-else statement and use
-    #     @classmethod
-    #     @property
-    #     def plugin_name(cls) -> str:
-    # below
-    class ClasspropertyMeta(type):
-        pass
-
-    # chain classmethod and property decorator
-    def classproperty(function):
-        return classmethod(property(function))
+from simple_classproperty import ClasspropertyMeta, classproperty
 
 
 class SamplePluginMeta(ABCMeta, ClasspropertyMeta):
