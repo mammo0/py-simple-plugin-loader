@@ -8,6 +8,9 @@ on:
       - v*
   pull_request:
 
+env:
+  POETRY_VERSION: "1.3.2"
+
 jobs:
   test:
     name: Test package
@@ -26,7 +29,7 @@ jobs:
         - name: Set up Poetry
           uses: abatilo/actions-poetry@v2
           with:
-            poetry-version: "1.2"
+            poetry-version: ${{ env.POETRY_VERSION }}
         # install the test dependencies
         - name: Install test dependencies
           run: |
@@ -54,7 +57,7 @@ jobs:
         - name: Set up Poetry
           uses: abatilo/actions-poetry@v2
           with:
-            poetry-version: "1.2"
+            poetry-version: ${{ env.POETRY_VERSION }}
         - name: Add dynamic versioning plugin
           run: |
             poetry self add "poetry-dynamic-versioning[plugin]"
