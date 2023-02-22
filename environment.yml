@@ -1,8 +1,0 @@
-name: conda-simple-plugin-loader
-channels:
-  - defaults
-dependencies:
-  - python<3.8
-  - pip
-  - pip:
-    - poetry>=1.2
