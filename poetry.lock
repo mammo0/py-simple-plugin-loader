@@ -86,13 +86,13 @@ testing = ["argcomplete", "attrs (>=19.2.0)", "hypothesis (>=3.56)", "mock", "no
 
 [[package]]
 name = "simple-classproperty"
-version = "4.0.0"
+version = "4.0.1"
 description = "Provides a 'classproperty' decorator."
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "simple_classproperty-4.0.0-py3-none-any.whl", hash = "sha256:3cfc794f0703f2b3e7e64a073bf70824845de26d2840f26e40382a62c3844bfd"},
-    {file = "simple_classproperty-4.0.0.tar.gz", hash = "sha256:22e83e3677b5b35b31c7a99ae86635aa6e7673b26068ddb8689797df2cf69aeb"},
+    {file = "simple_classproperty-4.0.1-py3-none-any.whl", hash = "sha256:425640b2e2624391bb4a9c55f0e04276edf252cf5505302dc54545c6aa945edb"},
+    {file = "simple_classproperty-4.0.1.tar.gz", hash = "sha256:d51ea519c21e46e0bb9b566ae57f1045e4bed077db675cfd1c9bc884607526fe"},
 ]
 
 [[package]]
