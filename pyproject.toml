@@ -16,7 +16,7 @@ python = ">=3.8"
 simple-classproperty = ">=3.0"
 
 [tool.poetry.dev-dependencies]
-pytest = "^7.4.3"
+pytest = "^7.4.4"
 
 [tool.poetry-dynamic-versioning]
 enable = true
