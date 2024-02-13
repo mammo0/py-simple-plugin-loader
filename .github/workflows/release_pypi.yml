@@ -38,6 +38,9 @@ jobs:
     if: ${{ github.event_name == 'push' }}
     needs: test
     runs-on: ubuntu-latest
+    # needed for publishing on PyPi with OIDC
+    permissions:
+      id-token: write
     steps:
         # checkout the repo
         - uses: actions/checkout@v4
@@ -55,19 +58,13 @@ jobs:
         - name: Build package
           run: |
             poetry build
-        # on a regular push publish the package to test PyPI repo
-        - name: Publish test package
-          env:
-            PYPI_TEST_TOKEN: ${{ secrets.PYPI_TEST_TOKEN }}
-          run: |
-            poetry config repositories.test-pypi https://test.pypi.org/legacy/
-            poetry config pypi-token.test-pypi $PYPI_TEST_TOKEN
-            poetry publish -r test-pypi
+        # on a regular push (not pull request) publish the package to test PyPI repo
+        - name: Publish package distributions to TestPyPI
+          if: github.event_name != 'pull_request'
+          uses: pypa/gh-action-pypi-publish@release/v1
+          with:
+            repository-url: https://test.pypi.org/legacy/
         # on a release push publish the package to the regular PyPI repo
-        - name: Publish release package
+        - name: Publish package distributions to PyPI
           if: startsWith(github.event.ref, 'refs/tags')
-          env:
-            PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
-          run: |
-            poetry config pypi-token.pypi $PYPI_TOKEN
-            poetry publish
+          uses: pypa/gh-action-pypi-publish@release/v1
