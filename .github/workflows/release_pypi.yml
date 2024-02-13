@@ -45,10 +45,8 @@ jobs:
             # fetch complete history because it's needed by Poetry
             fetch-depth: 0
         # setup python environment
-        - name: Set up Python 3.7
+        - name: Set up Python
           uses: actions/setup-python@v5
-          with:
-            python-version: "3.7"
         - name: Set up Poetry
           uses: abatilo/actions-poetry@v3
           with:
