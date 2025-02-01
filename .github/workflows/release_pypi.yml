@@ -24,7 +24,7 @@ jobs:
           with:
             python-version: ${{ matrix.python-version }}
         - name: Set up Poetry
-          uses: abatilo/actions-poetry@v3
+          uses: abatilo/actions-poetry@v4
         # install the test dependencies
         - name: Install test dependencies
           run: |
@@ -51,7 +51,7 @@ jobs:
         - name: Set up Python
           uses: actions/setup-python@v5
         - name: Set up Poetry
-          uses: abatilo/actions-poetry@v3
+          uses: abatilo/actions-poetry@v4
           with:
             poetry-plugins: "poetry-dynamic-versioning[plugin]"
         # build the package
